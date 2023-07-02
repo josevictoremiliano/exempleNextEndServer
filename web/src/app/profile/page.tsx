@@ -1,6 +1,8 @@
-import { cookies } from 'next/headers'
-import { getUser } from '@/lib/auth'
-import { api } from '@/lib/api'
+import { cookies } from "next/headers"
+import { getUser } from "@/lib/auth"
+import { api } from "@/lib/api"
+import { name } from "assert"
+import BtnFriendProfile from "@/components/peoples"
 
 interface User {
   name: string
@@ -8,15 +10,15 @@ interface User {
 }
 
 export default async function ProfilePage() {
-  const logout = '/api/logout'
-  const token = cookies().get('token')?.value
+  const logout = "/api/logout"
+  const token = cookies().get("token")?.value
   const { name, email } = getUser()
 
   if (!token) {
     return <h1>Not authenticated</h1>
   }
 
-  const response = await api.get('/users', {
+  const response = await api.get("/users", {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -75,6 +77,26 @@ export default async function ProfilePage() {
               </tbody>
             </table>
           </div>
+        </div>
+      </div>
+
+      <div className="container mx-auto">
+        <div className="flex ">
+          <div className="w-[15%] bg-red-800"></div>
+          <div className="w-[70%]">
+            <div className="justify-center flex-nowrap flex-col-2 md:flex md:flex-wrap container gap-4">
+              {users.map((user: User) => {
+                return (
+                  <BtnFriendProfile
+                    name={user.name}
+                    email={user.email}
+                    key={null}
+                  />
+                )
+              })}
+            </div>
+          </div>
+          <div className="w-[15%] bg-green-950 hidden md:block">nadaaqui</div>
         </div>
       </div>
     </div>
